@@ -15,4 +15,5 @@ Imports:
     readr,
     readxl,
     haven,
-    skimr
+    skimr,
+    broom
