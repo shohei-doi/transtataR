@@ -74,6 +74,7 @@ stata2r("sum")
 
 ```{r}
 stata2r("reg survived sex age")
+stata2r("reg survived sex age if age > 20")
 ```
 
 ## 発展的な使い方

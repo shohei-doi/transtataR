@@ -16,4 +16,5 @@ Imports:
     readxl,
     haven,
     skimr,
-    broom
+    broom,
+    dplyr

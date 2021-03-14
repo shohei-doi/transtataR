@@ -2,6 +2,7 @@
 
 export(browse)
 export(cd)
+export(keep)
 export(pwd)
 export(reg)
 export(stata2r)
