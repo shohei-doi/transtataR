@@ -1,7 +1,7 @@
 Package: transtataR
 Type: Package
 Title: Interpreting Stata code in R
-Version: 0.1.0
+Version: 0.0.1
 Author: Shohei Doi
 Maintainer: The package maintainer <shohei.doi0504@gmail.com>
 Description: More about what it does (maybe more than one line)
