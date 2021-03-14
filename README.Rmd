@@ -1,8 +1,6 @@
 ---
 title: "transtataR"
-output: 
-  github_document:
-    df_print: kable
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
@@ -30,7 +28,6 @@ devtools::install_github("shohei-doi/transtataR")
 install.packages("devtools")
 ```
 
-
 ## 基本的な使い方
 
 まずはパッケージを読み込みます。
@@ -47,6 +44,8 @@ library(transtataR)
 - `use`
 - `browse`
 - `sum`
+- `keep`
+- `drop`
 - `reg`
 
 ### 具体例
@@ -79,7 +78,7 @@ stata2r("reg survived sex age if age > 20")
 
 ## 発展的な使い方
 
-### ワークフロー
+### 内部の処理
 
 `stata2r()`はStataのコマンドをRコードに変換して実行をしていますが、実はStataコマンドと同じ名前の関数を定義しています。
 例えば、回帰分析を行う際には`reg()`を内部で呼び出しています。
