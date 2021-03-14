@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-reg <- function(fml, .if = NULL) {
+logit <- function(fml, .if = NULL) {
 
   fml <- make_fml(fml)
 
@@ -17,7 +17,9 @@ reg <- function(fml, .if = NULL) {
 
   }
 
-  out <- eval(parse(text = stringr::str_glue("lm({fml}, data = temp)")))
+  out <- eval(parse(text = stringr::str_glue("glm({fml},
+                                             family = binomial(link = 'logit'),
+                                             data = temp)")))
 
   print(broom::tidy(out, conf.int = TRUE))
   print(broom::glance(out))

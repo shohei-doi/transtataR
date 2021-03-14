@@ -46,7 +46,10 @@ library(transtataR)
 - `sum`
 - `keep`
 - `drop`
+- `gen`
 - `reg`
+- `logit`
+- `probit`
 
 ### 具体例
 
@@ -65,15 +68,30 @@ stata2r("use data/titanic passenger list.csv")
 - `.xls[x]`
 - `.dta`
 
-ちなみに、読み込んだデータはR上では`temp`で保存されています。
+- ちなみに、読み込んだデータはR上では`temp`で保存されています。
+
+記述統計を見ます。
 
 ```{r}
 stata2r("sum")
 ```
 
+変数を作ります（試しに、18歳以下の女性を表す`fchild`を作ります）。
+
 ```{r}
-stata2r("reg survived sex age")
-stata2r("reg survived sex age if age > 20")
+stata2r("gen fchild = 0")
+stata2r("gen fchild = 1 if age <= 18 & sex == 'female'")
+```
+
+- 文字列はシングルクオート`'`で囲んでください。
+
+回帰分析を行います。
+
+```{r}
+stata2r("reg survived c.sex age")
+stata2r("reg survived c.sex#age")
+stata2r("logit survived c.sex age if age > 20")
+stata2r("probit survived c.sex age if age <= 20")
 ```
 
 ## 発展的な使い方
