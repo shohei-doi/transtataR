@@ -6,8 +6,8 @@
 #' @export
 #'
 #' @examples
-cd <- function(path) {
+cd_ <- function(.arg = NULL, .if = NULL, .opt = NULL) {
 
-  setwd(path)
+  setwd(.arg)
 
 }

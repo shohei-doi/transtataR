@@ -7,9 +7,9 @@
 #' @export
 #'
 #' @examples
-logit <- function(fml, .if = NULL) {
+probit_ <- function(.arg = NULL, .if = NULL, .opt = NULL) {
 
-  fml <- make_fml(fml)
+  fml <- make_fml(.arg)
 
   if (!is.null(.if)) {
 
@@ -18,7 +18,7 @@ logit <- function(fml, .if = NULL) {
   }
 
   out <<- eval(parse(text = stringr::str_glue("glm({fml},
-                                                   family = binomial(link = 'logit'),
+                                                   family = binomial(link = 'probit'),
                                                    data = temp)")))
 
   knitr::kable(list(broom::tidy(out, conf.int = TRUE),

@@ -32,25 +32,21 @@ install.packages("devtools")
 library(transtataR)
 ```
 
-    ## 
-    ## Attaching package: 'transtataR'
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     drop, sum
-
 `stata2r()`という関数にStataのコードを入れて実行できます。 現在、対応しているStataのコマンドは以下の通りです。
 
   - `pwd`
   - `cd`
   - `use`
+  - `save`
   - `insheet using`
   - `import excel`
   - `browse`
   - `sum`
+  - `rename`
   - `keep`
   - `drop`
   - `gen`
+  - `replace`
   - `reg`
   - `logit`
   - `probit`
@@ -86,17 +82,46 @@ stata2r("insheet using 'data/titanic passenger list.csv'")
     ##   home.dest = col_character()
     ## )
 
-現在、対応しているファイル形式は以下の通りです。
-
-  - `.csv`
-
-  - `.tsv`
-
-  - `.xls[x]`
-
-  - `.dta`
-
   - 文字列はシングルクオート`'`で囲んでください。
+
+生データを見ます。
+
+``` r
+stata2r("browse")
+stata2r("browse if age > 20")
+stata2r("browse sex age")
+```
+
+生データの一部を見ます。
+
+``` r
+stata2r("list if age > 20")
+```
+
+    ## # A tibble: 6 x 14
+    ##   pclass survived name       sex     age sibsp parch ticket  fare cabin embarked
+    ##    <dbl>    <dbl> <chr>      <chr> <dbl> <dbl> <dbl> <chr>  <dbl> <chr> <chr>   
+    ## 1      1        1 Allen, Mi… fema…    29     0     0 24160  211.  B5    S       
+    ## 2      1        0 Allison, … male     30     1     2 113781 152.  C22 … S       
+    ## 3      1        0 Allison, … fema…    25     1     2 113781 152.  C22 … S       
+    ## 4      1        1 Anderson,… male     48     0     0 19952   26.6 E12   S       
+    ## 5      1        1 Andrews, … fema…    63     1     0 13502   78.0 D7    S       
+    ## 6      1        0 Andrews, … male     39     0     0 112050   0   A36   S       
+    ## # … with 3 more variables: boat <chr>, body <dbl>, home.dest <chr>
+
+``` r
+stata2r("list sex age")
+```
+
+    ## # A tibble: 6 x 2
+    ##   sex      age
+    ##   <chr>  <dbl>
+    ## 1 female 29   
+    ## 2 male    0.92
+    ## 3 female  2   
+    ## 4 male   30   
+    ## 5 female 25   
+    ## 6 male   48
 
 記述統計を見ます。
 
@@ -148,7 +173,7 @@ numeric**
 
 ``` r
 stata2r("gen fchild = 0")
-stata2r("gen fchild = 1 if age <= 18 & sex == 'female'")
+stata2r("replace fchild = 1 if age <= 18 & sex == 'female'")
 ```
 
 回帰分析を行います。
@@ -294,12 +319,12 @@ stata2r("probit survived c.sex age if age <= 20")
 
 ### 内部の処理
 
-`stata2r()`はStataのコマンドをRコードに変換して実行をしていますが、実はStataコマンドと同じ名前の関数を定義しています。
-例えば、回帰分析を行う際には`reg()`を内部で呼び出しています。
-なので、明示的に`reg()`を呼び出すことも可能です。
+`stata2r()`はStataのコマンドをRコードに変換して実行をしていますが、実はStataコマンドと同じ名前（に`_`を付けたもの）の関数を定義しています。
+例えば、回帰分析を行う際には`reg_()`を内部で呼び出しています。
+なので、明示的に`reg_()`を呼び出すことも可能です。
 
 ``` r
-reg("survived sex age")
+reg_("survived sex age")
 ```
 
 <table class="kable_wrapper">

@@ -42,13 +42,16 @@ library(transtataR)
 - `pwd`
 - `cd`
 - `use`
+- `save`
 - `insheet using`
 - `import excel`
 - `browse`
 - `sum`
+- `rename`
 - `keep`
 - `drop`
 - `gen`
+- `replace`
 - `reg`
 - `logit`
 - `probit`
@@ -63,14 +66,23 @@ library(transtataR)
 stata2r("insheet using 'data/titanic passenger list.csv'")
 ```
 
-現在、対応しているファイル形式は以下の通りです。
-
-- `.csv`
-- `.tsv`
-- `.xls[x]`
-- `.dta`
-
 - 文字列はシングルクオート`'`で囲んでください。
+
+生データを見ます。
+
+```{r, eval=FALSE}
+stata2r("browse")
+stata2r("browse if age > 20")
+stata2r("browse sex age")
+```
+
+生データの一部を見ます。
+
+```{r}
+stata2r("list if age > 20")
+stata2r("list sex age")
+```
+
 
 記述統計を見ます。
 
@@ -82,7 +94,7 @@ stata2r("sum")
 
 ```{r}
 stata2r("gen fchild = 0")
-stata2r("gen fchild = 1 if age <= 18 & sex == 'female'")
+stata2r("replace fchild = 1 if age <= 18 & sex == 'female'")
 ```
 
 回帰分析を行います。
@@ -98,12 +110,12 @@ stata2r("probit survived c.sex age if age <= 20")
 
 ### 内部の処理
 
-`stata2r()`はStataのコマンドをRコードに変換して実行をしていますが、実はStataコマンドと同じ名前の関数を定義しています。
-例えば、回帰分析を行う際には`reg()`を内部で呼び出しています。
-なので、明示的に`reg()`を呼び出すことも可能です。
+`stata2r()`はStataのコマンドをRコードに変換して実行をしていますが、実はStataコマンドと同じ名前（に`_`を付けたもの）の関数を定義しています。
+例えば、回帰分析を行う際には`reg_()`を内部で呼び出しています。
+なので、明示的に`reg_()`を呼び出すことも可能です。
 
 ```{r}
-reg("survived sex age")
+reg_("survived sex age")
 ```
 
 ## 動作環境

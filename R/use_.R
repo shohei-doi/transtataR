@@ -6,10 +6,9 @@
 #' @export
 #'
 #' @examples
-use <- function(path) {
+use_ <- function(.arg = NULL, .if = NULL, .opt = NULL) {
 
-  path <- stringr::str_remove_all(path, "'")
-  path <- stringr::str_remove(path, ",[ ]*clear$")
+  path <- stringr::str_remove_all(.arg, "'")
 
   if (stringr::str_detect(path, ".csv$")) {
 

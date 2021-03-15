@@ -7,9 +7,9 @@
 #' @export
 #'
 #' @examples
-reg <- function(fml, .if = NULL) {
+reg_ <- function(.arg = NULL, .if = NULL, .opt = NULL) {
 
-  fml <- make_fml(fml)
+  fml <- make_fml(.arg)
 
   if (!is.null(.if)) {
 

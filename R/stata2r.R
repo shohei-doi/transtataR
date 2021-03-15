@@ -8,28 +8,45 @@
 #' @examples
 stata2r <- function(scode) {
 
-  if (!stringr::str_detect(scode, " ")) {
+  .func <- stringr::str_extract(scode, "^[a-z]+")
+  .arg <- stringr::str_remove(scode, .func)
+  .if <- stringr::str_extract(scode, " if [^,]+,?")
+  .opt <- stringr::str_extract(scode, "\\, ?.+")
 
-    .func <- scode
-    eval(parse(text = stringr::str_glue('{.func}()')))
+  if (is.na(.if)) {
+
+    .if <- NULL
 
   } else {
 
-    .func <- stringr::str_extract(scode, "^[a-z]+")
-    .arg <- stringr::str_remove(scode, "^[a-z]+ ")
-
-    if (!stringr::str_detect(scode, " if ")) {
-
-      eval(parse(text = stringr::str_glue('{.func}("{.arg}")')))
-
-    } else {
-
-      .if <- stringr::str_remove(.arg, ".*if ")
-      .arg <- stringr::str_remove(.arg, " if .+")
-      eval(parse(text = stringr::str_glue('{.func}("{.arg}","{.if}")')))
-
-    }
+    .if <- stringr::str_remove(.if, ",")
+    .arg <- stringr::str_remove(.arg, .if)
+    .if <- stringr::str_remove(.if, " if ")
 
   }
+
+  if (is.na(.opt)) {
+
+    .opt <- NULL
+
+  } else {
+
+    .arg <- stringr::str_remove(.arg, .opt)
+    .opt <- stringr::str_remove(.opt, "\\, ?")
+
+  }
+
+  if (.arg == "") {
+
+    .arg <- NULL
+
+  } else {
+
+    .arg <- stringr::str_remove(.arg, "^ ")
+
+  }
+
+  .func <- stringr::str_c(.func, "_")
+  eval(parse(text = .func))(.arg, .if, .opt)
 
 }

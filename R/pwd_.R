@@ -4,7 +4,7 @@
 #' @export
 #'
 #' @examples
-pwd <- function() {
+pwd_ <- function(.arg = NULL, .if = NULL, .opt = NULL) {
 
   getwd()
 
