@@ -17,11 +17,11 @@ probit <- function(fml, .if = NULL) {
 
   }
 
-  out <- eval(parse(text = stringr::str_glue("glm({fml},
-                                             family = binomial(link = 'probit'),
-                                             data = temp)")))
+  out <<- eval(parse(text = stringr::str_glue("glm({fml},
+                                                   family = binomial(link = 'probit'),
+                                                   data = temp)")))
 
-  print(broom::tidy(out, conf.int = TRUE))
-  print(broom::glance(out))
+  knitr::kable(list(broom::tidy(out, conf.int = TRUE),
+                    broom::glance(out)))
 
 }

@@ -3,8 +3,8 @@ transtataR
 
 StataユーザーのためのRパッケージです。
 
--   作成者：[土井翔平](https://shohei-doi.github.io/)
--   連絡先：[shohei.doi0504@gmail.com](shohei.doi0504@gmail.com)
+  - 作成者：[土井翔平](https://shohei-doi.github.io/)
+  - 連絡先：[shohei.doi0504@gmail.com](shohei.doi0504@gmail.com)
 
 開発者はStataユーザーではないので、バグや要望を報告していただけると幸いです。
 
@@ -16,7 +16,9 @@ StataユーザーのためのRパッケージです。
 devtools::install_github("shohei-doi/transtataR")
 ```
 
--   `{devtools}`をインストールしていない人は、まずこちらからインストールしてください。
+  - `{devtools}`をインストールしていない人は、まずこちらからインストールしてください。
+
+<!-- end list -->
 
 ``` r
 install.packages("devtools")
@@ -37,20 +39,19 @@ library(transtataR)
     ## 
     ##     drop, sum
 
-`stata2r()`という関数にStataのコードを入れて実行できます。
-現在、対応しているStataのコマンドは以下の通りです。
+`stata2r()`という関数にStataのコードを入れて実行できます。 現在、対応しているStataのコマンドは以下の通りです。
 
--   `pwd`
--   `cd`
--   `use`
--   `browse`
--   `sum`
--   `keep`
--   `drop`
--   `gen`
--   `reg`
--   `logit`
--   `probit`
+  - `pwd`
+  - `cd`
+  - `use`
+  - `browse`
+  - `sum`
+  - `keep`
+  - `drop`
+  - `gen`
+  - `reg`
+  - `logit`
+  - `probit`
 
 ### 具体例
 
@@ -61,7 +62,7 @@ List](https://public.tableau.com/s/sites/default/files/media/titanic%20passenger
 このようにしてStataのコマンド`use`でデータを読み込むことができます。
 
 ``` r
-stata2r("use data/titanic passenger list.csv")
+stata2r("use 'data/titanic passenger list.csv'")
 ```
 
     ## 
@@ -85,15 +86,15 @@ stata2r("use data/titanic passenger list.csv")
 
 現在、対応しているファイル形式は以下の通りです。
 
--   `.csv`
+  - `.csv`
 
--   `.tsv`
+  - `.tsv`
 
--   `.xls[x]`
+  - `.xls[x]`
 
--   `.dta`
+  - `.dta`
 
--   ちなみに、読み込んだデータはR上では`temp`で保存されています。
+  - 文字列はシングルクオート`'`で囲んでください。
 
 記述統計を見ます。
 
@@ -102,7 +103,7 @@ stata2r("sum")
 ```
 
 |                                                  |      |
-|:-------------------------------------------------|:-----|
+| :----------------------------------------------- | :--- |
 | Name                                             | temp |
 | Number of rows                                   | 1309 |
 | Number of columns                                | 14   |
@@ -115,10 +116,11 @@ stata2r("sum")
 
 Data summary
 
-**Variable type: character**
+**Variable type:
+character**
 
 | skim\_variable | n\_missing | complete\_rate | min | max | empty | n\_unique | whitespace |
-|:---------------|-----------:|---------------:|----:|----:|------:|----------:|-----------:|
+| :------------- | ---------: | -------------: | --: | --: | ----: | --------: | ---------: |
 | name           |          0 |           1.00 |  12 |  82 |     0 |      1307 |          0 |
 | sex            |          0 |           1.00 |   4 |   6 |     0 |         2 |          0 |
 | ticket         |          0 |           1.00 |   3 |  18 |     0 |       929 |          0 |
@@ -127,10 +129,11 @@ Data summary
 | boat           |        823 |           0.37 |   1 |   7 |     0 |        27 |          0 |
 | home.dest      |        564 |           0.57 |   5 |  50 |     0 |       369 |          0 |
 
-**Variable type: numeric**
+**Variable type:
+numeric**
 
 | skim\_variable | n\_missing | complete\_rate |   mean |    sd |   p0 |  p25 |    p50 |    p75 |   p100 | hist  |
-|:---------------|-----------:|---------------:|-------:|------:|-----:|-----:|-------:|-------:|-------:|:------|
+| :------------- | ---------: | -------------: | -----: | ----: | ---: | ---: | -----: | -----: | -----: | :---- |
 | pclass         |          0 |           1.00 |   2.29 |  0.84 | 1.00 |  2.0 |   3.00 |   3.00 |   3.00 | ▃▁▃▁▇ |
 | survived       |          0 |           1.00 |   0.38 |  0.49 | 0.00 |  0.0 |   0.00 |   1.00 |   1.00 | ▇▁▁▁▅ |
 | age            |        263 |           0.80 |  29.88 | 14.41 | 0.17 | 21.0 |  28.00 |  39.00 |  80.00 | ▂▇▅▂▁ |
@@ -146,72 +149,144 @@ stata2r("gen fchild = 0")
 stata2r("gen fchild = 1 if age <= 18 & sex == 'female'")
 ```
 
--   文字列はシングルクオート`'`で囲んでください。
-
 回帰分析を行います。
 
 ``` r
 stata2r("reg survived c.sex age")
 ```
 
-    ## # A tibble: 3 x 7
-    ##   term                estimate std.error statistic  p.value conf.low conf.high
-    ##   <chr>                  <dbl>     <dbl>     <dbl>    <dbl>    <dbl>     <dbl>
-    ## 1 (Intercept)         0.773     0.0331      23.3   2.80e-97  0.708     0.839  
-    ## 2 as.factor(sex)male -0.546     0.0266     -20.5   6.68e-79 -0.598    -0.494  
-    ## 3 age                -0.000729  0.000892    -0.817 4.14e- 1 -0.00248   0.00102
-    ## # A tibble: 1 x 12
-    ##   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
-    ##       <dbl>         <dbl> <dbl>     <dbl>    <dbl> <dbl>  <dbl> <dbl> <dbl>
-    ## 1     0.290         0.289 0.415      213. 2.91e-78     2  -562. 1132. 1152.
-    ## # … with 3 more variables: deviance <dbl>, df.residual <int>, nobs <int>
+<table class="kable_wrapper">
+
+<tbody>
+
+<tr>
+
+<td>
+
+| term               |    estimate | std.error |    statistic |   p.value |    conf.low |   conf.high |
+| :----------------- | ----------: | --------: | -----------: | --------: | ----------: | ----------: |
+| (Intercept)        |   0.7734799 | 0.0331389 |   23.3405257 | 0.0000000 |   0.7084534 |   0.8385065 |
+| as.factor(sex)male | \-0.5460271 | 0.0266030 | \-20.5250524 | 0.0000000 | \-0.5982285 | \-0.4938257 |
+| age                | \-0.0007286 | 0.0008920 |  \-0.8168609 | 0.4141945 | \-0.0024790 |   0.0010217 |
+
+</td>
+
+<td>
+
+| r.squared | adj.r.squared |    sigma | statistic | p.value | df |    logLik |     AIC |      BIC | deviance | df.residual | nobs |
+| --------: | ------------: | -------: | --------: | ------: | -: | --------: | ------: | -------: | -------: | ----------: | ---: |
+| 0.2898984 |     0.2885368 | 0.414774 |   212.902 |       0 |  2 | \-562.205 | 1132.41 | 1152.221 | 179.4351 |        1043 | 1046 |
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 ``` r
 stata2r("reg survived c.sex#age")
 ```
 
-    ## # A tibble: 4 x 7
-    ##   term                  estimate std.error statistic  p.value conf.low conf.high
-    ##   <chr>                    <dbl>     <dbl>     <dbl>    <dbl>    <dbl>     <dbl>
-    ## 1 (Intercept)            0.638     0.0462      13.8  5.67e-40  0.547     0.728  
-    ## 2 as.factor(sex)male    -0.321     0.0598      -5.38 9.35e- 8 -0.439    -0.204  
-    ## 3 age                    0.00401   0.00144      2.79 5.34e- 3  0.00119   0.00682
-    ## 4 as.factor(sex)male:a… -0.00764   0.00182     -4.19 3.01e- 5 -0.0112   -0.00406
-    ## # A tibble: 1 x 12
-    ##   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
-    ##       <dbl>         <dbl> <dbl>     <dbl>    <dbl> <dbl>  <dbl> <dbl> <dbl>
-    ## 1     0.302         0.300 0.412      150. 8.06e-81     3  -553. 1117. 1142.
-    ## # … with 3 more variables: deviance <dbl>, df.residual <int>, nobs <int>
+<table class="kable_wrapper">
+
+<tbody>
+
+<tr>
+
+<td>
+
+| term                   |    estimate | std.error |  statistic |   p.value |    conf.low |   conf.high |
+| :--------------------- | ----------: | --------: | ---------: | --------: | ----------: | ----------: |
+| (Intercept)            |   0.6376443 | 0.0461651 |  13.812273 | 0.0000000 |   0.5470573 |   0.7282314 |
+| as.factor(sex)male     | \-0.3213069 | 0.0597572 | \-5.376873 | 0.0000001 | \-0.4385651 | \-0.2040487 |
+| age                    |   0.0040064 | 0.0014350 |   2.791848 | 0.0053366 |   0.0011905 |   0.0068223 |
+| as.factor(sex)male:age | \-0.0076412 | 0.0018230 | \-4.191583 | 0.0000301 | \-0.0112184 | \-0.0040641 |
+
+</td>
+
+<td>
+
+| r.squared | adj.r.squared |     sigma | statistic | p.value | df |     logLik |     AIC |      BIC | deviance | df.residual | nobs |
+| --------: | ------------: | --------: | --------: | ------: | -: | ---------: | ------: | -------: | -------: | ----------: | ---: |
+| 0.3016731 |     0.2996625 | 0.4115181 |  150.0459 |       0 |  3 | \-553.4601 | 1116.92 | 1141.684 | 176.4597 |        1042 | 1046 |
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 ``` r
 stata2r("logit survived c.sex age if age > 20")
 ```
 
-    ## # A tibble: 3 x 7
-    ##   term               estimate std.error statistic  p.value conf.low conf.high
-    ##   <chr>                 <dbl>     <dbl>     <dbl>    <dbl>    <dbl>     <dbl>
-    ## 1 (Intercept)         1.10      0.298       3.69  2.29e- 4   0.523     1.69  
-    ## 2 as.factor(sex)male -2.74      0.183     -14.9   1.74e-50  -3.10     -2.39  
-    ## 3 age                 0.00440   0.00751     0.586 5.58e- 1  -0.0104    0.0191
-    ## # A tibble: 1 x 8
-    ##   null.deviance df.null logLik   AIC   BIC deviance df.residual  nobs
-    ##           <dbl>   <int>  <dbl> <dbl> <dbl>    <dbl>       <int> <int>
-    ## 1         1069.     797  -396.  798.  812.     792.         795   798
+<table class="kable_wrapper">
+
+<tbody>
+
+<tr>
+
+<td>
+
+| term               |    estimate | std.error |    statistic |   p.value |    conf.low |   conf.high |
+| :----------------- | ----------: | --------: | -----------: | --------: | ----------: | ----------: |
+| (Intercept)        |   1.0989882 | 0.2982265 |    3.6850786 | 0.0002286 |   0.5234534 |   1.6941716 |
+| as.factor(sex)male | \-2.7380086 | 0.1832337 | \-14.9427117 | 0.0000000 | \-3.1040388 | \-2.3851325 |
+| age                |   0.0044011 | 0.0075084 |    0.5861617 | 0.5577668 | \-0.0104175 |   0.0190546 |
+
+</td>
+
+<td>
+
+| null.deviance | df.null |     logLik |      AIC |      BIC | deviance | df.residual | nobs |
+| ------------: | ------: | ---------: | -------: | -------: | -------: | ----------: | ---: |
+|      1068.898 |     797 | \-396.1391 | 798.2782 | 812.3245 | 792.2782 |         795 |  798 |
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 ``` r
 stata2r("probit survived c.sex age if age <= 20")
 ```
 
-    ## # A tibble: 3 x 7
-    ##   term               estimate std.error statistic  p.value conf.low conf.high
-    ##   <chr>                 <dbl>     <dbl>     <dbl>    <dbl>    <dbl>     <dbl>
-    ## 1 (Intercept)          1.02      0.210       4.87 1.11e- 6   0.629     1.43  
-    ## 2 as.factor(sex)male  -1.07      0.172      -6.24 4.39e-10  -1.41     -0.738 
-    ## 3 age                 -0.0429    0.0128     -3.34 8.30e- 4  -0.0680   -0.0182
-    ## # A tibble: 1 x 8
-    ##   null.deviance df.null logLik   AIC   BIC deviance df.residual  nobs
-    ##           <dbl>   <int>  <dbl> <dbl> <dbl>    <dbl>       <int> <int>
-    ## 1          342.     247  -144.  295.  305.     289.         245   248
+<table class="kable_wrapper">
+
+<tbody>
+
+<tr>
+
+<td>
+
+| term               |    estimate | std.error |  statistic |   p.value |    conf.low |   conf.high |
+| :----------------- | ----------: | --------: | ---------: | --------: | ----------: | ----------: |
+| (Intercept)        |   1.0244842 | 0.2102965 |   4.871618 | 0.0000011 |   0.6291244 |   1.4291668 |
+| as.factor(sex)male | \-1.0720972 | 0.1718239 | \-6.239511 | 0.0000000 | \-1.4107643 | \-0.7384901 |
+| age                | \-0.0429378 | 0.0128453 | \-3.342690 | 0.0008297 | \-0.0679808 | \-0.0182344 |
+
+</td>
+
+<td>
+
+| null.deviance | df.null |     logLik |      AIC |      BIC | deviance | df.residual | nobs |
+| ------------: | ------: | ---------: | -------: | -------: | -------: | ----------: | ---: |
+|      342.1863 |     247 | \-144.2955 | 294.5911 | 305.1314 | 288.5911 |         245 |  248 |
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 ## 発展的な使い方
 
@@ -225,17 +300,35 @@ stata2r("probit survived c.sex age if age <= 20")
 reg("survived sex age")
 ```
 
-    ## # A tibble: 3 x 7
-    ##   term         estimate std.error statistic  p.value conf.low conf.high
-    ##   <chr>           <dbl>     <dbl>     <dbl>    <dbl>    <dbl>     <dbl>
-    ## 1 (Intercept)  0.773     0.0331      23.3   2.80e-97  0.708     0.839  
-    ## 2 sexmale     -0.546     0.0266     -20.5   6.68e-79 -0.598    -0.494  
-    ## 3 age         -0.000729  0.000892    -0.817 4.14e- 1 -0.00248   0.00102
-    ## # A tibble: 1 x 12
-    ##   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
-    ##       <dbl>         <dbl> <dbl>     <dbl>    <dbl> <dbl>  <dbl> <dbl> <dbl>
-    ## 1     0.290         0.289 0.415      213. 2.91e-78     2  -562. 1132. 1152.
-    ## # … with 3 more variables: deviance <dbl>, df.residual <int>, nobs <int>
+<table class="kable_wrapper">
+
+<tbody>
+
+<tr>
+
+<td>
+
+| term        |    estimate | std.error |    statistic |   p.value |    conf.low |   conf.high |
+| :---------- | ----------: | --------: | -----------: | --------: | ----------: | ----------: |
+| (Intercept) |   0.7734799 | 0.0331389 |   23.3405257 | 0.0000000 |   0.7084534 |   0.8385065 |
+| sexmale     | \-0.5460271 | 0.0266030 | \-20.5250524 | 0.0000000 | \-0.5982285 | \-0.4938257 |
+| age         | \-0.0007286 | 0.0008920 |  \-0.8168609 | 0.4141945 | \-0.0024790 |   0.0010217 |
+
+</td>
+
+<td>
+
+| r.squared | adj.r.squared |    sigma | statistic | p.value | df |    logLik |     AIC |      BIC | deviance | df.residual | nobs |
+| --------: | ------------: | -------: | --------: | ------: | -: | --------: | ------: | -------: | -------: | ----------: | ---: |
+| 0.2898984 |     0.2885368 | 0.414774 |   212.902 |       0 |  2 | \-562.205 | 1132.41 | 1152.221 | 179.4351 |        1043 | 1046 |
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 ## 動作環境
 
@@ -245,19 +338,19 @@ sessionInfo()
 
     ## R version 4.0.4 (2021-02-15)
     ## Platform: x86_64-pc-linux-gnu (64-bit)
-    ## Running under: Ubuntu 20.04.2 LTS
+    ## Running under: Ubuntu 18.04.5 LTS
     ## 
     ## Matrix products: default
-    ## BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.9.0
-    ## LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.9.0
+    ## BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1
+    ## LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1
     ## 
     ## locale:
     ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
-    ##  [3] LC_TIME=ja_JP.UTF-8        LC_COLLATE=en_US.UTF-8    
-    ##  [5] LC_MONETARY=ja_JP.UTF-8    LC_MESSAGES=en_US.UTF-8   
-    ##  [7] LC_PAPER=ja_JP.UTF-8       LC_NAME=C                 
+    ##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+    ##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+    ##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
     ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-    ## [11] LC_MEASUREMENT=ja_JP.UTF-8 LC_IDENTIFICATION=C       
+    ## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
     ## 
     ## attached base packages:
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     

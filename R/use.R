@@ -8,6 +8,7 @@
 #' @examples
 use <- function(path) {
 
+  path <- stringr::str_remove_all(path, "'")
   path <- stringr::str_remove(path, ",[ ]*clear$")
 
   if (stringr::str_detect(path, ".csv$")) {

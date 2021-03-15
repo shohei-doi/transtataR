@@ -3,9 +3,8 @@ Type: Package
 Title: Interpreting Stata code in R
 Version: 0.0.1
 Author: Shohei Doi
-Maintainer: The package maintainer <shohei.doi0504@gmail.com>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Maintainer: Shohei Doi <shohei.doi0504@gmail.com>
+Description: A main function of this package interpret Stata code and execute it in R. It also include wrapper functions written in Stata-like style.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

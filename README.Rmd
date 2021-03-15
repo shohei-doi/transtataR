@@ -58,7 +58,7 @@ library(transtataR)
 このようにしてStataのコマンド`use`でデータを読み込むことができます。
 
 ```{r}
-stata2r("use data/titanic passenger list.csv")
+stata2r("use 'data/titanic passenger list.csv'")
 ```
 
 現在、対応しているファイル形式は以下の通りです。
@@ -68,7 +68,7 @@ stata2r("use data/titanic passenger list.csv")
 - `.xls[x]`
 - `.dta`
 
-- ちなみに、読み込んだデータはR上では`temp`で保存されています。
+- 文字列はシングルクオート`'`で囲んでください。
 
 記述統計を見ます。
 
@@ -82,8 +82,6 @@ stata2r("sum")
 stata2r("gen fchild = 0")
 stata2r("gen fchild = 1 if age <= 18 & sex == 'female'")
 ```
-
-- 文字列はシングルクオート`'`で囲んでください。
 
 回帰分析を行います。
 
@@ -106,10 +104,8 @@ stata2r("probit survived c.sex age if age <= 20")
 reg("survived sex age")
 ```
 
-
 ## 動作環境
 
 ```{r}
 sessionInfo()
 ```
-
