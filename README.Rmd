@@ -60,6 +60,8 @@ library(transtataR)
 
 例として[Tableau Public](https://public.tableau.com/s/resources)のSample Dataから[Titanic Passenger List](https://public.tableau.com/s/sites/default/files/media/titanic%20passenger%20list.csv)をダウンロードして、適当な場所に保存をします。
 
+#### データの読み込み
+
 このようにしてStataのコマンド`use`でデータを読み込むことができます。
 
 ```{r}
@@ -67,6 +69,8 @@ stata2r("insheet using 'data/titanic passenger list.csv'")
 ```
 
 - 文字列はシングルクオート`'`で囲んでください。
+
+#### データの閲覧
 
 生データを見ます。
 
@@ -83,6 +87,7 @@ stata2r("list if age > 20")
 stata2r("list sex age")
 ```
 
+#### 記述統計
 
 記述統計を見ます。
 
@@ -90,12 +95,16 @@ stata2r("list sex age")
 stata2r("sum")
 ```
 
+#### 変数の作成、加工
+
 変数を作ります（試しに、18歳以下の女性を表す`fchild`を作ります）。
 
 ```{r}
 stata2r("gen fchild = 0")
 stata2r("replace fchild = 1 if age <= 18 & sex == 'female'")
 ```
+
+#### 回帰分析
 
 回帰分析を行います。
 
@@ -115,8 +124,16 @@ stata2r("probit survived c.sex age if age <= 20")
 なので、明示的に`reg_()`を呼び出すことも可能です。
 
 ```{r}
-reg_("survived sex age")
+reg_("survived sex age", .if = "age > 20")
 ```
+
+### Rコードの表示
+
+TBA
+
+### doファイルの変換
+
+TBA
 
 ## 動作環境
 

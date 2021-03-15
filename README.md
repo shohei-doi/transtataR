@@ -57,6 +57,8 @@ library(transtataR)
 Dataから[Titanic Passenger
 List](https://public.tableau.com/s/sites/default/files/media/titanic%20passenger%20list.csv)をダウンロードして、適当な場所に保存をします。
 
+#### データの読み込み
+
 このようにしてStataのコマンド`use`でデータを読み込むことができます。
 
 ``` r
@@ -84,6 +86,8 @@ stata2r("insheet using 'data/titanic passenger list.csv'")
 
   - 文字列はシングルクオート`'`で囲んでください。
 
+#### データの閲覧
+
 生データを見ます。
 
 ``` r
@@ -98,30 +102,29 @@ stata2r("browse sex age")
 stata2r("list if age > 20")
 ```
 
-    ## # A tibble: 6 x 14
-    ##   pclass survived name       sex     age sibsp parch ticket  fare cabin embarked
-    ##    <dbl>    <dbl> <chr>      <chr> <dbl> <dbl> <dbl> <chr>  <dbl> <chr> <chr>   
-    ## 1      1        1 Allen, Mi… fema…    29     0     0 24160  211.  B5    S       
-    ## 2      1        0 Allison, … male     30     1     2 113781 152.  C22 … S       
-    ## 3      1        0 Allison, … fema…    25     1     2 113781 152.  C22 … S       
-    ## 4      1        1 Anderson,… male     48     0     0 19952   26.6 E12   S       
-    ## 5      1        1 Andrews, … fema…    63     1     0 13502   78.0 D7    S       
-    ## 6      1        0 Andrews, … male     39     0     0 112050   0   A36   S       
-    ## # … with 3 more variables: boat <chr>, body <dbl>, home.dest <chr>
+| pclass | survived | name                                            | sex    | age | sibsp | parch | ticket |     fare | cabin   | embarked | boat | body | home.dest                       |
+| -----: | -------: | :---------------------------------------------- | :----- | --: | ----: | ----: | :----- | -------: | :------ | :------- | :--- | ---: | :------------------------------ |
+|      1 |        1 | Allen, Miss. Elisabeth Walton                   | female |  29 |     0 |     0 | 24160  | 211.3375 | B5      | S        | 2    |   NA | St Louis, MO                    |
+|      1 |        0 | Allison, Mr. Hudson Joshua Creighton            | male   |  30 |     1 |     2 | 113781 | 151.5500 | C22 C26 | S        | NA   |  135 | Montreal, PQ / Chesterville, ON |
+|      1 |        0 | Allison, Mrs. Hudson J C (Bessie Waldo Daniels) | female |  25 |     1 |     2 | 113781 | 151.5500 | C22 C26 | S        | NA   |   NA | Montreal, PQ / Chesterville, ON |
+|      1 |        1 | Anderson, Mr. Harry                             | male   |  48 |     0 |     0 | 19952  |  26.5500 | E12     | S        | 3    |   NA | New York, NY                    |
+|      1 |        1 | Andrews, Miss. Kornelia Theodosia               | female |  63 |     1 |     0 | 13502  |  77.9583 | D7      | S        | 10   |   NA | Hudson, NY                      |
+|      1 |        0 | Andrews, Mr. Thomas Jr                          | male   |  39 |     0 |     0 | 112050 |   0.0000 | A36     | S        | NA   |   NA | Belfast, NI                     |
 
 ``` r
 stata2r("list sex age")
 ```
 
-    ## # A tibble: 6 x 2
-    ##   sex      age
-    ##   <chr>  <dbl>
-    ## 1 female 29   
-    ## 2 male    0.92
-    ## 3 female  2   
-    ## 4 male   30   
-    ## 5 female 25   
-    ## 6 male   48
+| sex    |   age |
+| :----- | ----: |
+| female | 29.00 |
+| male   |  0.92 |
+| female |  2.00 |
+| male   | 30.00 |
+| female | 25.00 |
+| male   | 48.00 |
+
+#### 記述統計
 
 記述統計を見ます。
 
@@ -169,12 +172,16 @@ numeric**
 | fare           |          1 |           1.00 |  33.30 | 51.76 | 0.00 |  7.9 |  14.45 |  31.27 | 512.33 | ▇▁▁▁▁ |
 | body           |       1188 |           0.09 | 160.81 | 97.70 | 1.00 | 72.0 | 155.00 | 256.00 | 328.00 | ▇▇▇▅▇ |
 
+#### 変数の作成、加工
+
 変数を作ります（試しに、18歳以下の女性を表す`fchild`を作ります）。
 
 ``` r
 stata2r("gen fchild = 0")
 stata2r("replace fchild = 1 if age <= 18 & sex == 'female'")
 ```
+
+#### 回帰分析
 
 回帰分析を行います。
 
@@ -324,7 +331,7 @@ stata2r("probit survived c.sex age if age <= 20")
 なので、明示的に`reg_()`を呼び出すことも可能です。
 
 ``` r
-reg_("survived sex age")
+reg_("survived sex age", .if = "age > 20")
 ```
 
 <table class="kable_wrapper">
@@ -335,19 +342,19 @@ reg_("survived sex age")
 
 <td>
 
-| term        |    estimate | std.error |    statistic |   p.value |    conf.low |   conf.high |
-| :---------- | ----------: | --------: | -----------: | --------: | ----------: | ----------: |
-| (Intercept) |   0.7734799 | 0.0331389 |   23.3405257 | 0.0000000 |   0.7084534 |   0.8385065 |
-| sexmale     | \-0.5460271 | 0.0266030 | \-20.5250524 | 0.0000000 | \-0.5982285 | \-0.4938257 |
-| age         | \-0.0007286 | 0.0008920 |  \-0.8168609 | 0.4141945 | \-0.0024790 |   0.0010217 |
+| term        |    estimate | std.error |   statistic |   p.value |    conf.low |   conf.high |
+| :---------- | ----------: | --------: | ----------: | --------: | ----------: | ----------: |
+| (Intercept) |   0.7532176 | 0.0483268 |   15.585923 | 0.0000000 |   0.6583544 |   0.8480808 |
+| sexmale     | \-0.5929084 | 0.0296027 | \-20.028854 | 0.0000000 | \-0.6510171 | \-0.5347996 |
+| age         |   0.0006997 | 0.0011971 |    0.584507 | 0.5590451 | \-0.0016501 |   0.0030496 |
 
 </td>
 
 <td>
 
-| r.squared | adj.r.squared |    sigma | statistic | p.value | df |    logLik |     AIC |      BIC | deviance | df.residual | nobs |
-| --------: | ------------: | -------: | --------: | ------: | -: | --------: | ------: | -------: | -------: | ----------: | ---: |
-| 0.2898984 |     0.2885368 | 0.414774 |   212.902 |       0 |  2 | \-562.205 | 1132.41 | 1152.221 | 179.4351 |        1043 | 1046 |
+| r.squared | adj.r.squared |    sigma | statistic | p.value | df |     logLik |      AIC |      BIC | deviance | df.residual | nobs |
+| --------: | ------------: | -------: | --------: | ------: | -: | ---------: | -------: | -------: | -------: | ----------: | ---: |
+| 0.3354915 |     0.3338198 | 0.398757 |  200.6865 |       0 |  2 | \-397.1264 | 802.2529 | 820.9813 | 126.4107 |         795 |  798 |
 
 </td>
 
@@ -356,6 +363,14 @@ reg_("survived sex age")
 </tbody>
 
 </table>
+
+### Rコードの表示
+
+TBA
+
+### doファイルの変換
+
+TBA
 
 ## 動作環境
 

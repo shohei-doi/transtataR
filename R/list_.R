@@ -19,6 +19,6 @@ list_ <- function(.arg = NULL, .if = NULL, .opt = NULL) {
 
   }
 
-  head(temp)
+  knitr::kable(head(temp))
 
 }
