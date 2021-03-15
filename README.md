@@ -44,6 +44,8 @@ library(transtataR)
   - `pwd`
   - `cd`
   - `use`
+  - `insheet using`
+  - `import excel`
   - `browse`
   - `sum`
   - `keep`
@@ -62,7 +64,7 @@ List](https://public.tableau.com/s/sites/default/files/media/titanic%20passenger
 このようにしてStataのコマンド`use`でデータを読み込むことができます。
 
 ``` r
-stata2r("use 'data/titanic passenger list.csv'")
+stata2r("insheet using 'data/titanic passenger list.csv'")
 ```
 
     ## 
