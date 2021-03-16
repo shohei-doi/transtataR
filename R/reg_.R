@@ -13,14 +13,17 @@ reg_ <- function(.arg = NULL, .if = NULL, .opt = NULL) {
 
   if (!is.null(.if)) {
 
-    temp <- eval(parse(text = stringr::str_glue("dplyr::filter(temp, {.if})")))
+    rcode <- stringr::str_glue("model <<- lm({fml}, data = dat, if = .if)")
 
   }
 
-  out <<- eval(parse(text = stringr::str_glue("lm({fml}, data = temp)")))
+  rcode <- stringr::str_glue("model <<- lm({fml}, data = dat)")
 
 
-  knitr::kable(list(broom::tidy(out, conf.int = TRUE),
-                    broom::glance(out)))
+  rcode <- c(rcode,
+             "broom::tidy(model, conf.int = TRUE)",
+             "broom::glance(model)")
+
+  return(rcode)
 
 }

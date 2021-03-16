@@ -11,16 +11,20 @@ gen_ <- function(.arg = NULL, .if = NULL, .opt = NULL) {
 
   if (is.null(.if)) {
 
-    temp <<- eval(parse(text = stringr::str_glue("dplyr::mutate(temp, {.arg})")))
+    rcode <- stringr::str_glue("dat <<- dplyr::mutate(dat, {.arg})")
 
   } else {
 
     oldvar <- stringr::str_extract(.arg, "^[^ =]+")
     newvar <- stringr::str_extract(.arg, "=.*$")
     newvar <- stringr::str_remove(newvar, "=[ ]*")
-    temp <<- eval(parse(text = stringr::str_glue("dplyr::mutate(temp, {oldvar} =
-                                                 dplyr::if_else({.if}, {newvar}, {oldvar}))")))
+    rcode <-
+      stringr::str_glue(
+        "dat <<- dplyr::mutate(dat, {oldvar} = dplyr::if_else({.if}, {newvar}, {oldvar}))"
+        )
 
   }
+
+  return(rcode)
 
 }

@@ -10,19 +10,16 @@
 #' @examples
 browse_ <- function(.arg = NULL, .if = NULL, .opt = NULL) {
 
-  if (!is.null(.arg)) {
+  if (is.null(.arg) && is.null(.if)) {
 
-    vars <- stringr::str_replace_all(.arg, " ", ", ")
-    temp <- dplyr::select(temp, eval(parse(text = vars)))
+    rcode <- "View(dat)"
 
-  }
+  } else {
 
-  if (!is.null(.if)) {
-
-    temp <- dplyr::filter(temp, eval(parse(text = .if)))
+    rcode <- c(limit_data(.arg, .if), "View(temp)")
 
   }
 
-  View(temp)
+  return(rcode)
 
 }

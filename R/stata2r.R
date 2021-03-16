@@ -6,47 +6,143 @@
 #' @export
 #'
 #' @examples
-stata2r <- function(scode) {
+stata2r <- function(..., show.code = FALSE, trans = FALSE) {
 
-  .func <- stringr::str_extract(scode, "^[a-z]+")
-  .arg <- stringr::str_remove(scode, .func)
-  .if <- stringr::str_extract(scode, " if [^,]+,?")
-  .opt <- stringr::str_extract(scode, "\\, ?.+")
+  scodes <- c(...)
+  out <- list()
 
-  if (is.na(.if)) {
+  for (i in seq_len(length(scodes))) {
 
-    .if <- NULL
+    scode <- scodes[i]
 
-  } else {
+    if (!trans) {
 
-    .if <- stringr::str_remove(.if, ",")
-    .arg <- stringr::str_remove(.arg, .if)
-    .if <- stringr::str_remove(.if, " if ")
+      cat("Stata code:\n")
+      cat(scode)
+      cat("\n\n")
+
+    }
+
+    .func <- stringr::str_extract(scode, "^[a-z]+")
+    .arg <- stringr::str_remove(scode, .func)
+    .if <- stringr::str_extract(scode, " if [^,]+,?")
+    .opt <- stringr::str_extract(scode, "\\, ?.+")
+
+    if (is.na(.if)) {
+
+      .if <- NULL
+
+    } else {
+
+      .if <- stringr::str_remove(.if, ",")
+      .arg <- stringr::str_remove(.arg, .if)
+      .if <- stringr::str_remove(.if, " if ")
+
+    }
+
+    if (is.na(.opt)) {
+
+      .opt <- NULL
+
+    } else {
+
+      .arg <- stringr::str_remove(.arg, .opt)
+      .opt <- stringr::str_remove(.opt, "\\, ?")
+
+    }
+
+    if (.arg == "") {
+
+      .arg <- NULL
+
+    } else {
+
+      .arg <- stringr::str_remove(.arg, "^ ")
+
+    }
+
+    .func <- stringr::str_c(.func, "_")
+    rcode <- eval(parse(text = .func))(.arg, .if, .opt)
+
+    if (!show.code && !trans) {
+
+      for (i in seq_len(length(rcode))) {
+
+        if (stringr::str_detect(rcode[i], "(skim|head|broom)")) {
+
+          if (stringr::str_detect(rcode[i], "tidy")) {
+
+            cat("Coefficitnes:\n")
+
+          } else if (stringr::str_detect(rcode[i], "glance")) {
+
+            cat("Model summaries:\n")
+
+          }
+
+          print(eval(parse(text = rcode[i])))
+
+          cat("\n")
+
+        } else {
+
+          eval(parse(text = rcode[i]))
+
+        }
+
+      }
+
+    } else {
+
+      rcode <- stringr::str_replace_all(rcode, "<<-", "<-")
+      pkg <- NULL
+
+      if (sum(stringr::str_detect(rcode, "::")) > 0) {
+
+        pkg <- stringr::str_extract_all(rcode, "[a-zA-Z0-9_\\.]+::[a-zA-Z0-9_\\.]+",
+                                        simplify = TRUE)
+        pkg <- pkg[pkg[,1] != "",]
+        pkg <- stringr::str_split(pkg, "::", simplify = TRUE)
+        colnames(pkg) <- c("package", "function")
+        pkg <- dplyr::as_tibble(pkg)
+
+      }
+
+      rcode <- stringr::str_remove_all(rcode, "[a-zA-Z0-9_\\.]+::")
+
+      if (show.code) {
+
+        cat("R code:\n")
+
+        for (i in seq_len(length(rcode))) {
+
+          cat(rcode[i])
+          cat("\n")
+
+        }
+
+        if (!is.null(pkg)) {
+
+          cat("\nR packages:\n")
+          print(pkg)
+          cat("\n")
+
+        }
+
+      } else {
+
+        out[[i]] <- list(scode = scode, rcode = rcode, pkg = pkg)
+
+      }
+
+    }
 
   }
 
-  if (is.na(.opt)) {
+  if (trans) {
 
-    .opt <- NULL
-
-  } else {
-
-    .arg <- stringr::str_remove(.arg, .opt)
-    .opt <- stringr::str_remove(.opt, "\\, ?")
+    return(out)
 
   }
-
-  if (.arg == "") {
-
-    .arg <- NULL
-
-  } else {
-
-    .arg <- stringr::str_remove(.arg, "^ ")
-
-  }
-
-  .func <- stringr::str_c(.func, "_")
-  eval(parse(text = .func))(.arg, .if, .opt)
 
 }

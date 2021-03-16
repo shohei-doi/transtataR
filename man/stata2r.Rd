@@ -4,7 +4,7 @@
 \alias{stata2r}
 \title{Title}
 \usage{
-stata2r(scode)
+stata2r(..., show.code = FALSE, trans = FALSE)
 }
 \arguments{
 \item{scode}{}

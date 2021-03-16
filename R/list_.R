@@ -6,19 +6,16 @@
 #' @examples
 list_ <- function(.arg = NULL, .if = NULL, .opt = NULL) {
 
-  if (!is.null(.arg)) {
+  if (is.null(.arg) && is.null(.if)) {
 
-    vars <- stringr::str_replace_all(.arg, " ", ", ")
-    temp <- eval(parse(text = stringr::str_glue("dplyr::select(temp, {vars})")))
+    rcode <- "head(dat)"
 
-  }
+  } else {
 
-  if (!is.null(.if)) {
-
-    temp <- eval(parse(text = stringr::str_glue("dplyr::filter(temp, {.if})")))
+    rcode <- c(limit_data(.arg, .if), "head(temp)")
 
   }
 
-  knitr::kable(head(temp))
+  return(rcode)
 
 }

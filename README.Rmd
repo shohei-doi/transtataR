@@ -12,6 +12,7 @@ StataユーザーのためのRパッケージです。
 - 作成者：[土井翔平](https://shohei-doi.github.io/)
 - 連絡先：[shohei.doi0504@gmail.com](shohei.doi0504@gmail.com)
 
+趣味の範囲内なので、それをご理解の上、ご利用して下さい。
 開発者はStataユーザーではないので、バグや要望を報告していただけると幸いです。
 
 ## インストール
@@ -46,6 +47,7 @@ library(transtataR)
 - `insheet using`
 - `import excel`
 - `browse`
+- `list`
 - `sum`
 - `rename`
 - `keep`
@@ -117,23 +119,49 @@ stata2r("probit survived c.sex age if age <= 20")
 
 ## 発展的な使い方
 
-### 内部の処理
+### 複数行の実行
 
-`stata2r()`はStataのコマンドをRコードに変換して実行をしていますが、実はStataコマンドと同じ名前（に`_`を付けたもの）の関数を定義しています。
-例えば、回帰分析を行う際には`reg_()`を内部で呼び出しています。
-なので、明示的に`reg_()`を呼び出すことも可能です。
+`stata2r()`には複数のStataコードを入力することができます。
 
 ```{r}
-reg_("survived sex age", .if = "age > 20")
+stata2r(
+  "insheet using 'data/titanic passenger list.csv'",
+  "list age sex",
+  "reg survived c.sex age"
+)
 ```
 
 ### Rコードの表示
 
-TBA
+オプション`show.code`を`TRUE`にするとコマンドを実行する代わりにRコードとパッケージを表示します。
+
+```{r}
+stata2r("reg survived c.sex#age", show.code = TRUE)
+```
+
+```{r}
+stata2r(
+  "insheet using 'data/titanic passenger list.csv'",
+  "list age sex",
+  "reg survived c.sex age",
+  show.code = TRUE
+)
+```
 
 ### doファイルの変換
 
-TBA
+関数`transtataR()`はdoファイルのパスを引数に取り、Rコードに翻訳します。
+例えば、[サンプルdoファイル](code/sample.do)を[Rコード](code/sample.R)にしてみます。
+
+```{r}
+transtataR("code/sample.do")
+```
+
+`execute`を`TRUE`にするとコードの変換の代わりに実行します。
+
+```{r}
+transtataR("code/sample.do", execute = TRUE)
+```
 
 ## 動作環境
 
