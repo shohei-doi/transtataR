@@ -15,14 +15,6 @@ stata2r <- function(..., show.code = FALSE, trans = FALSE) {
 
     scode <- scodes[i]
 
-    if (!trans) {
-
-      cat("Stata code:\n")
-      cat(scode)
-      cat("\n\n")
-
-    }
-
     .func <- stringr::str_extract(scode, "^[a-z]+")
     .arg <- stringr::str_remove(scode, .func)
     .if <- stringr::str_extract(scode, " if [^,]+,?")
@@ -111,6 +103,10 @@ stata2r <- function(..., show.code = FALSE, trans = FALSE) {
       rcode <- stringr::str_remove_all(rcode, "[a-zA-Z0-9_\\.]+::")
 
       if (show.code) {
+
+        cat("Stata code:\n")
+        cat(scode)
+        cat("\n\n")
 
         cat("R code:\n")
 

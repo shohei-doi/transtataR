@@ -157,13 +157,15 @@ stata2r(
 transtataR("code/sample.do")
 ```
 
-`execute`を`TRUE`にするとコードの変換の代わりに実行します。
+- `path`を特定しない場合、doファイルと同じディレクトリに同じ名前で保存します。
+
+`execute`を`TRUE`にするとコードを変換する代わりに実行します。
 
 ```{r}
 transtataR("code/sample.do", execute = TRUE)
 ```
 
-## 動作環境
+## 開発環境
 
 ```{r}
 sessionInfo()

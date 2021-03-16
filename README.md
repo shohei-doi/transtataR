@@ -66,9 +66,6 @@ List](https://public.tableau.com/s/sites/default/files/media/titanic%20passenger
 stata2r("insheet using 'data/titanic passenger list.csv'")
 ```
 
-    ## Stata code:
-    ## insheet using 'data/titanic passenger list.csv'
-
     ## 
     ## ── Column specification ────────────────────────────────────────────────────────
     ## cols(
@@ -106,9 +103,6 @@ stata2r("browse sex age")
 stata2r("list if age > 20")
 ```
 
-    ## Stata code:
-    ## list if age > 20
-    ## 
     ## # A tibble: 6 x 14
     ##   pclass survived name       sex     age sibsp parch ticket  fare cabin embarked
     ##    <dbl>    <dbl> <chr>      <chr> <dbl> <dbl> <dbl> <chr>  <dbl> <chr> <chr>   
@@ -124,9 +118,6 @@ stata2r("list if age > 20")
 stata2r("list sex age")
 ```
 
-    ## Stata code:
-    ## list sex age
-    ## 
     ## # A tibble: 6 x 2
     ##   sex      age
     ##   <chr>  <dbl>
@@ -145,9 +136,6 @@ stata2r("list sex age")
 stata2r("sum")
 ```
 
-    ## Stata code:
-    ## sum
-    ## 
     ## ── Data Summary ────────────────────────
     ##                            Values
     ## Name                       dat   
@@ -194,17 +182,8 @@ stata2r("sum")
 
 ``` r
 stata2r("gen fchild = 0")
-```
-
-    ## Stata code:
-    ## gen fchild = 0
-
-``` r
 stata2r("replace fchild = 1 if age <= 18 & sex == 'female'")
 ```
-
-    ## Stata code:
-    ## replace fchild = 1 if age <= 18 & sex == 'female'
 
 #### 回帰分析
 
@@ -214,9 +193,6 @@ stata2r("replace fchild = 1 if age <= 18 & sex == 'female'")
 stata2r("reg survived c.sex age")
 ```
 
-    ## Stata code:
-    ## reg survived c.sex age
-    ## 
     ## Coefficitnes:
     ## # A tibble: 3 x 7
     ##   term                estimate std.error statistic  p.value conf.low conf.high
@@ -236,9 +212,6 @@ stata2r("reg survived c.sex age")
 stata2r("reg survived c.sex#age")
 ```
 
-    ## Stata code:
-    ## reg survived c.sex#age
-    ## 
     ## Coefficitnes:
     ## # A tibble: 4 x 7
     ##   term                  estimate std.error statistic  p.value conf.low conf.high
@@ -259,9 +232,6 @@ stata2r("reg survived c.sex#age")
 stata2r("logit survived c.sex age if age > 20")
 ```
 
-    ## Stata code:
-    ## logit survived c.sex age if age > 20
-    ## 
     ## Coefficitnes:
     ## # A tibble: 3 x 7
     ##   term               estimate std.error statistic  p.value conf.low conf.high
@@ -280,9 +250,6 @@ stata2r("logit survived c.sex age if age > 20")
 stata2r("probit survived c.sex age if age <= 20")
 ```
 
-    ## Stata code:
-    ## probit survived c.sex age if age <= 20
-    ## 
     ## Coefficitnes:
     ## # A tibble: 3 x 7
     ##   term               estimate std.error statistic  p.value conf.low conf.high
@@ -311,9 +278,6 @@ stata2r(
 )
 ```
 
-    ## Stata code:
-    ## insheet using 'data/titanic passenger list.csv'
-
     ## 
     ## ── Column specification ────────────────────────────────────────────────────────
     ## cols(
@@ -333,9 +297,6 @@ stata2r(
     ##   home.dest = col_character()
     ## )
 
-    ## Stata code:
-    ## list age sex
-    ## 
     ## # A tibble: 6 x 2
     ##     age sex   
     ##   <dbl> <chr> 
@@ -345,9 +306,6 @@ stata2r(
     ## 4 30    male  
     ## 5 25    female
     ## 6 48    male  
-    ## 
-    ## Stata code:
-    ## reg survived c.sex age
     ## 
     ## Coefficitnes:
     ## # A tibble: 3 x 7
@@ -448,14 +406,13 @@ stata2r(
 transtataR("code/sample.do")
 ```
 
-`execute`を`TRUE`にするとコードの変換の代わりに実行します。
+  - `path`を特定しない場合、doファイルと同じディレクトリに同じ名前で保存します。
+
+`execute`を`TRUE`にするとコードを変換する代わりに実行します。
 
 ``` r
 transtataR("code/sample.do", execute = TRUE)
 ```
-
-    ## Stata code:
-    ## insheet using 'data/titanic passenger list.csv'
 
     ## 
     ## ── Column specification ────────────────────────────────────────────────────────
@@ -476,9 +433,6 @@ transtataR("code/sample.do", execute = TRUE)
     ##   home.dest = col_character()
     ## )
 
-    ## Stata code:
-    ## list age sex if age > 20
-    ## 
     ## # A tibble: 6 x 2
     ##     age sex   
     ##   <dbl> <chr> 
@@ -488,9 +442,6 @@ transtataR("code/sample.do", execute = TRUE)
     ## 4    48 male  
     ## 5    63 female
     ## 6    39 male  
-    ## 
-    ## Stata code:
-    ## reg survived c.sex age
     ## 
     ## Coefficitnes:
     ## # A tibble: 3 x 7
@@ -507,7 +458,7 @@ transtataR("code/sample.do", execute = TRUE)
     ## 1     0.290         0.289 0.415      213. 2.91e-78     2  -562. 1132. 1152.
     ## # … with 3 more variables: deviance <dbl>, df.residual <int>, nobs <int>
 
-## 動作環境
+## 開発環境
 
 ``` r
 sessionInfo()
