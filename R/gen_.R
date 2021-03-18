@@ -9,6 +9,8 @@
 #' @examples
 gen_ <- function(.arg = NULL, .if = NULL, .opt = NULL) {
 
+  .arg <- stringr::str_replace(.arg, "\\.", "NA_real_")
+
   if (is.null(.if)) {
 
     rcode <- stringr::str_glue("dat <<- dplyr::mutate(dat, {.arg})")

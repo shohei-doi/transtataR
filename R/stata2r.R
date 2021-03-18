@@ -30,6 +30,12 @@ stata2r <- function(..., show.code = FALSE, trans = FALSE) {
       .arg <- stringr::str_remove(.arg, .if)
       .if <- stringr::str_remove(.if, " if ")
 
+      if (stringr::str_detect(.if, "\\.")) {
+
+        .if <- stringr::str_glue("is.na({stringr::str_extract(.if, '[a-zA-Z0-9]+')})")
+
+      }
+
     }
 
     if (is.na(.opt)) {

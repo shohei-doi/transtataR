@@ -185,6 +185,8 @@ stata2r("gen fchild = 0")
 stata2r("replace fchild = 1 if age <= 18 & sex == 'female'")
 ```
 
+  - 欠損値の代入は現在のところ実数に対してのみ対応しています。
+
 #### 回帰分析
 
 回帰分析を行います。
