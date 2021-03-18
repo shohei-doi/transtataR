@@ -40,24 +40,29 @@ library(transtataR)
 `stata2r()`という関数にStataのコードを入れて実行できます。
 現在、対応しているStataのコマンドは以下の通りです。
 
-- `pwd`
-- `cd`
-- `use`
-- `save`
-- `insheet using`
-- `import excel`
-- `browse`
-- `list`
-- `sum`
-- `desc`
-- `rename`
-- `keep`
-- `drop`
-- `gen`
-- `replace`
-- `reg`
-- `logit`
-- `probit`
+- ディレクトリ
+  - `pwd`
+  - `cd`
+- データ入出力
+  - `use`
+  - `save`
+  - `insheet using`
+  - `import excel`
+- データ確認
+  - `browse`
+  - `list`
+  - `sum`
+  - `desc`
+- データ加工
+  - `rename`
+  - `keep`
+  - `drop`
+  - `gen`
+  - `replace`
+- 回帰分析
+  - `reg`
+  - `logit`
+  - `probit`
 
 ### 具体例
 
@@ -88,6 +93,12 @@ stata2r("browse sex age")
 ```{r}
 stata2r("list if age > 20")
 stata2r("list sex age")
+```
+
+データの変数の型を確認します。
+
+```{r}
+stata2r("desc")
 ```
 
 #### 記述統計

@@ -3,10 +3,11 @@ transtataR
 
 StataユーザーのためのRパッケージです。
 
-  - 作成者：[土井翔平](https://shohei-doi.github.io/)
-  - 連絡先：[shohei.doi0504@gmail.com](shohei.doi0504@gmail.com)
+-   作成者：[土井翔平](https://shohei-doi.github.io/)
+-   連絡先：[shohei.doi0504@gmail.com](shohei.doi0504@gmail.com)
 
-趣味の範囲内なので、それをご理解の上、ご利用して下さい。 開発者はStataユーザーではないので、バグや要望を報告していただけると幸いです。
+趣味の範囲内なので、それをご理解の上、ご利用して下さい。
+開発者はStataユーザーではないので、バグや要望を報告していただけると幸いです。
 
 ## インストール
 
@@ -16,9 +17,7 @@ StataユーザーのためのRパッケージです。
 devtools::install_github("shohei-doi/transtataR")
 ```
 
-  - `{devtools}`をインストールしていない人は、まずこちらからインストールしてください。
-
-<!-- end list -->
+-   `{devtools}`をインストールしていない人は、まずこちらからインストールしてください。
 
 ``` r
 install.packages("devtools")
@@ -32,25 +31,32 @@ install.packages("devtools")
 library(transtataR)
 ```
 
-`stata2r()`という関数にStataのコードを入れて実行できます。 現在、対応しているStataのコマンドは以下の通りです。
+`stata2r()`という関数にStataのコードを入れて実行できます。
+現在、対応しているStataのコマンドは以下の通りです。
 
-  - `pwd`
-  - `cd`
-  - `use`
-  - `save`
-  - `insheet using`
-  - `import excel`
-  - `browse`
-  - `list`
-  - `sum`
-  - `rename`
-  - `keep`
-  - `drop`
-  - `gen`
-  - `replace`
-  - `reg`
-  - `logit`
-  - `probit`
+-   ディレクトリ
+    -   `pwd`
+    -   `cd`
+-   データ入出力
+    -   `use`
+    -   `save`
+    -   `insheet using`
+    -   `import excel`
+-   データ確認
+    -   `browse`
+    -   `list`
+    -   `sum`
+    -   `desc`
+-   データ加工
+    -   `rename`
+    -   `keep`
+    -   `drop`
+    -   `gen`
+    -   `replace`
+-   回帰分析
+    -   `reg`
+    -   `logit`
+    -   `probit`
 
 ### 具体例
 
@@ -85,7 +91,7 @@ stata2r("insheet using 'data/titanic passenger list.csv'")
     ##   home.dest = col_character()
     ## )
 
-  - 文字列はシングルクオート`'`で囲んでください。
+-   文字列はシングルクオート`'`で囲んでください。
 
 #### データの閲覧
 
@@ -127,6 +133,28 @@ stata2r("list sex age")
     ## 4 male   30   
     ## 5 female 25   
     ## 6 male   48
+
+データの変数の型を確認します。
+
+``` r
+stata2r("desc")
+```
+
+    ## spec_tbl_df [1,309 × 14] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+    ##  $ pclass   : num [1:1309] 1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ survived : num [1:1309] 1 1 0 0 0 1 1 0 1 0 ...
+    ##  $ name     : chr [1:1309] "Allen, Miss. Elisabeth Walton" "Allison, Master. Hudson Trevor" "Allison, Miss. Helen Loraine" "Allison, Mr. Hudson Joshua Creighton" ...
+    ##  $ sex      : chr [1:1309] "female" "male" "female" "male" ...
+    ##  $ age      : num [1:1309] 29 0.92 2 30 25 48 63 39 53 71 ...
+    ##  $ sibsp    : num [1:1309] 0 1 1 1 1 0 1 0 2 0 ...
+    ##  $ parch    : num [1:1309] 0 2 2 2 2 0 0 0 0 0 ...
+    ##  $ ticket   : chr [1:1309] "24160" "113781" "113781" "113781" ...
+    ##  $ fare     : num [1:1309] 211 152 152 152 152 ...
+    ##  $ cabin    : chr [1:1309] "B5" "C22 C26" "C22 C26" "C22 C26" ...
+    ##  $ embarked : chr [1:1309] "S" "S" "S" "S" ...
+    ##  $ boat     : chr [1:1309] "2" "11" NA NA ...
+    ##  $ body     : num [1:1309] NA NA NA 135 NA NA NA NA NA 22 ...
+    ##  $ home.dest: chr [1:1309] "St Louis, MO" "Montreal, PQ / Chesterville, ON" "Montreal, PQ / Chesterville, ON" "Montreal, PQ / Chesterville, ON" ...
 
 #### 記述統計
 
@@ -185,7 +213,7 @@ stata2r("gen fchild = 0")
 stata2r("replace fchild = 1 if age <= 18 & sex == 'female'")
 ```
 
-  - 欠損値の代入は現在のところ実数に対してのみ対応しています。
+-   欠損値の代入は現在のところ実数に対してのみ対応しています。
 
 #### 回帰分析
 
@@ -408,7 +436,7 @@ stata2r(
 transtataR("code/sample.do")
 ```
 
-  - `path`を特定しない場合、doファイルと同じディレクトリに同じ名前で保存します。
+-   `path`を特定しない場合、doファイルと同じディレクトリに同じ名前で保存します。
 
 `execute`を`TRUE`にするとコードを変換する代わりに実行します。
 
@@ -468,19 +496,19 @@ sessionInfo()
 
     ## R version 4.0.4 (2021-02-15)
     ## Platform: x86_64-pc-linux-gnu (64-bit)
-    ## Running under: Ubuntu 18.04.5 LTS
+    ## Running under: Ubuntu 20.04.2 LTS
     ## 
     ## Matrix products: default
-    ## BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1
-    ## LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1
+    ## BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.9.0
+    ## LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.9.0
     ## 
     ## locale:
     ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
-    ##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
-    ##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
-    ##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+    ##  [3] LC_TIME=ja_JP.UTF-8        LC_COLLATE=en_US.UTF-8    
+    ##  [5] LC_MONETARY=ja_JP.UTF-8    LC_MESSAGES=en_US.UTF-8   
+    ##  [7] LC_PAPER=ja_JP.UTF-8       LC_NAME=C                 
     ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-    ## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+    ## [11] LC_MEASUREMENT=ja_JP.UTF-8 LC_IDENTIFICATION=C       
     ## 
     ## attached base packages:
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     

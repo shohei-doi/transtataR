@@ -8,7 +8,7 @@
 #' @export
 #'
 #' @examples
-decs <- function(.arg = NULL, .if = NULL, .opt = NULL) {
+desc_ <- function(.arg = NULL, .if = NULL, .opt = NULL) {
 
   rcode <- "str(dat, give.attr = FALSE)"
 
